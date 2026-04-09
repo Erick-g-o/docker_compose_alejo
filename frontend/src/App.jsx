@@ -34,30 +34,33 @@ function App() {
   });
 
   useEffect(() => {
-    fetchData();
+    fetchData(true);
   }, []);
 
-  const fetchData = async () => {
-    setLoading(true);
+  const fetchData = async (isInitial = false) => {
+    if (isInitial) setLoading(true);
     try {
-      const [servicesRes, appointmentsRes] = await Promise.all([
-        axios.get(`${API_URL}/services`),
-        axios.get(`${API_URL}/appointments`)
-      ]);
-      setServices(servicesRes.data);
+      const appointmentsRes = await axios.get(`${API_URL}/appointments`);
       setAppointments(appointmentsRes.data);
+      
+      if (isInitial) {
+        const servicesRes = await axios.get(`${API_URL}/services`);
+        setServices(servicesRes.data);
+      }
     } catch (error) {
       console.error('Error fetching data:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        text: 'No se pudo conectar con el servidor.',
-        background: '#111',
-        color: '#fff',
-        confirmButtonColor: '#7046f2'
-      });
+      if (isInitial) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error de conexión',
+          text: 'No se pudo conectar con el servidor.',
+          background: '#111',
+          color: '#fff',
+          confirmButtonColor: '#7046f2'
+        });
+      }
     } finally {
-      setLoading(false);
+      if (isInitial) setLoading(false);
     }
   };
 
