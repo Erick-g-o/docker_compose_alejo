@@ -21,7 +21,7 @@ services:
   backend:
     build: 
       context: ./backend
-    image: usuario/bookit-backend:latest
+    image: esteebanosoriio/bookit-backend:latest
     container_name: bookit-backend
     restart: always
     environment:
@@ -43,7 +43,7 @@ services:
       context: ./frontend
       args:
         VITE_API_URL: http://localhost:3001
-    image: usuario/bookit-frontend:latest
+    image: esteebanosoriio/bookit-frontend:latest
     container_name: bookit-frontend
     restart: always
     ports:
